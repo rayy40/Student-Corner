@@ -6,12 +6,29 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    colors: {
+      "white": "#ffffff",
+      "slate": "#121212",
+      "light-gray": "#e7e6e5",
+      "hover-light-gray": "#e3e3e2",
+      "dark-gray": "#19171199",
+      "hover-dark-gray": "#37352f14",
+    },
+    fontSize: {
+      xs: ['0.875rem', { letterSpacing: '-0.03em'}],
+      sm: ['1rem', { letterSpacing: '-0.03em'}],
+      lg: ['1.5rem', { letterSpacing: '-0.03em'}],
+      xl: ['2rem', { letterSpacing: '-0.03em'}],
+      '2xl': ['2.5rem', { letterSpacing: '-0.032em'}],
+      '3xl': ['3rem', { letterSpacing: '-0.032em'}],
+      '4xl': ['3.5rem', { letterSpacing: '-0.032em'}],
+      '5xl': ['4rem', { letterSpacing: '-0.032em'}]
+    },
+    fontFamily: {
+      satoshi: 'Satoshi, sans-serif',
+      inter: 'Inter, sans-serif',
+    },
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
     },
   },
   plugins: [],
