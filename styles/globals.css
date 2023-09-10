@@ -100,6 +100,38 @@
 .cl-headerSubtitle {
     display: none;
 }
+
+.cl-userButtonPopoverCard {
+    width: unset;
+    box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.35);
+    border-radius: 12px;
+    padding: 0;
+}
+
+.cl-userPreview {
+    margin: 0;
+    padding: 1em;
+    border-bottom: 1px solid rgba(15, 15, 15, 0.15);
+}
+
+.cl-userButtonPopoverActionButton__signOut {
+    padding-left: 0.5em;
+    gap: 0em;
+    align-items: flex-end;
+}
+
+.cl-userButtonPopoverActionButtonIcon {
+    color: gray;
+}
+
+.cl-userButtonPopoverActionButtonText {
+    font-size: 0.825rem;
+    color: #333;
+}
+
+.cl-userButtonPopoverFooter, .cl-userButtonPopoverActionButton__manageAccount {
+    display: none;
+}
   
   .cl-formButtonPrimary:hover,
   .cl-formButtonPrimary:focus,
