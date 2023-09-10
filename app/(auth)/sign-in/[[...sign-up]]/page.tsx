@@ -9,6 +9,7 @@ export default function SignInPage() {
   const {isLoaded, signIn,setActive} = useSignIn();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
@@ -25,6 +26,7 @@ export default function SignInPage() {
       });
 
       if (result.status === "complete") {
+        setError(null)
         console.log(result);
         await setActive({ session: result.createdSessionId });
         router.push("/")
@@ -34,8 +36,9 @@ export default function SignInPage() {
         console.log(result);
       }
 
-    } catch (error) {
-      console.error(JSON.stringify(error, null, 2))
+    } catch (err: any) {
+      console.error(JSON.stringify(err, null, 2))
+      setError(err?.errors[0].message)
     }
   }
 
@@ -49,6 +52,9 @@ export default function SignInPage() {
           <div className="flex flex-col gap-1">
           <input className="text-sm p-2 h-[36px] font-normal bg-input-background shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password" />
           </div>
+ {error &&         <div className="w-full flex items-center justify-center">
+            <p className="text-xs text-sign-in">{error}</p>
+          </div>}
           <button className="text-sm w-full p-2 h-[36px] flex items-center justify-center bg-sign-in-background text-sign-in shadow-[inset_0_0_0_1px_rgba(235,87,87,0.3)] rounded-md" type="submit" onClick={handleSubmit}>
             Sign In
           </button>
