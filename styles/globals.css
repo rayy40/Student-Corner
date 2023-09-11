@@ -7,100 +7,6 @@
     padding-bottom: 2em;
 }
 
-.cl-internal-b3fm6y {
-    display: none;
-}
-
-.cl-header {
-    align-items: center;
-}
-
-.cl-headerTitle {
-    font-size: 2.5rem;
-    font-weight: 500;
-}
-
-.cl-form {
-    order: 0;
-}
-
-.cl-formFieldLabel {
-    font-size: 0.825rem;
-    font-weight: 400;
-    color: rgba(55, 53, 47, 0.65); 
-    margin-bottom: 4px;
-}
-
-.cl-formFieldInput {
-    padding-left: 0.65em;
-    padding-right: 0.65em;
-    height: 36px;
-    font-size: 15px;
-    line-height: 26px;
-   background: rgba(242, 241, 238, 0.6);
-   box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset;
-   border: none;
-}
-
-.cl-formButtonPrimary {
-    height: 36px;
-    font-size: 14px;
-    font-weight: 500;
-    text-transform: none;
-    color: rgb(235, 87, 87);
-    background: rgb(253, 245, 242);
-    box-shadow: rgba(15, 15, 15, 0.1) 0px 1px 2px, rgba(235, 87, 87, 0.3) 0px 0px 0px 1px inset;
-  }
-
-.cl-dividerRow {
-    order: 1;
-}
-
-.cl-socialButtons {
-    order: 2;
-}
-
-.cl-socialButtonsBlockButton {
-    height: 40px;
-    display: inline-flex;
-    gap: 0.5em;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border-radius: 4px;
-    color: rgb(17, 17, 17);
-    background: white;
-    border: 1px solid rgba(15, 15, 15, 0.15);
-    box-shadow: rgba(15, 15, 15, 0.05) 0px 1px 2px;
-}
-
-.cl-socialButtonsBlockButton:hover, .cl-socialButtonsBlockButton:focus {
-    --arrow-opacity: 0;
-    background-color: rgba(242, 241, 238, 0.6);
-}
-
-.cl-socialButtonsBlockButtonText {
-    font-size: 0.85rem;
-    font-weight: 500;
-}
-
-.cl-internal-16pk7q8  {
-    width: unset;
-}
-
-.cl-providerIcon {
-    width: 14px;
-    height: 14px;
-}
-
-.cl-footer {
-    display: none;
-}
-
-.cl-headerSubtitle {
-    display: none;
-}
-
 .cl-userButtonPopoverCard {
     width: unset;
     box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.35);
@@ -112,6 +18,10 @@
     margin: 0;
     padding: 1em;
     border-bottom: 1px solid rgba(15, 15, 15, 0.15);
+}
+
+.cl-userPreviewAvatarContainer {
+    display: none;
 }
 
 .cl-userButtonPopoverActionButton__signOut {

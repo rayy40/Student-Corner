@@ -10,11 +10,11 @@ module.exports = {
       "white": "#ffffff",
       "slate": "#121212",
       "light-gray": "#e7e6e5",
-      "hover-light-gray": "#e3e3e2",
+      "hover-light-gray": "#d6d6d5",
       "input-background": "rgba(242, 241, 238, 0.6)",
       "sign-in": "rgb(235,87,87)",
       "sign-in-background": "rgb(253,245,242)",
-      "dark-gray": "#19171199",
+      "dark-gray": "#979794",
       "hover-dark-gray": "#37352f14",
     },
     fontSize: {
