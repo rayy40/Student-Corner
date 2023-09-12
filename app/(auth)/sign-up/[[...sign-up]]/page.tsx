@@ -4,6 +4,7 @@ import {useState} from "react";
 import { useSignUp } from "@clerk/clerk-react"
 import {useRouter} from "next/navigation";
 import Link from "next/link"
+import { FaGoogle } from "react-icons/fa6";
 
 export default function SignUpPage() {
   const {isLoaded, signUp,setActive} = useSignUp();
@@ -89,6 +90,12 @@ export default function SignUpPage() {
           <button className="text-sm w-full p-2 h-[36px] flex items-center justify-center bg-sign-in-background text-sign-in shadow-[inset_0_0_0_1px_rgba(235,87,87,0.3)] rounded-md" type="submit" onClick={handleSubmit}>
             Sign Up
           </button>
+          <div className="relative mt-4 border-t border-light-gray">
+            <span className="text-xs bg-white text-light-gray px-2 absolute top-[-12.5px] left-[50%] translate-x-[-50%] ">or</span>
+            <button className="mt-6 w-full p-4 h-[36px] text-xs bg-light-gray flex gap-2 items-center justify-center shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md hover:bg-hover-light-gray transition-all">
+              <FaGoogle color={"gray"} />
+              Sign up with Google</button>
+          </div>
         </form>}
         {isPendingVerification && (
           <form className="w-full flex flex-col gap-2 items-center justify-center">

@@ -3,48 +3,53 @@
 @tailwind utilities;
 
 .cl-card {
-    box-shadow: unset;
-    padding-bottom: 2em;
+  box-shadow: unset;
+  padding-bottom: 2em;
 }
 
 .cl-userButtonPopoverCard {
-    width: unset;
-    box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.35);
-    border-radius: 12px;
-    padding: 0;
+  width: unset;
+  box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.35);
+  border-radius: 12px;
+  padding: 0;
 }
 
 .cl-userPreview {
-    margin: 0;
-    padding: 1em;
-    border-bottom: 1px solid rgba(15, 15, 15, 0.15);
+  margin: 0;
+  padding: 1em;
+  border-bottom: 1px solid rgba(15, 15, 15, 0.15);
 }
 
 .cl-userPreviewAvatarContainer {
-    display: none;
+  display: none;
 }
 
 .cl-userButtonPopoverActionButton__signOut {
-    padding-left: 0.5em;
-    gap: 0em;
-    align-items: flex-end;
+  padding-left: 0.5em;
+  gap: 0em;
+  align-items: flex-end;
 }
 
 .cl-userButtonPopoverActionButtonIcon {
-    color: gray;
+  color: gray;
 }
 
 .cl-userButtonPopoverActionButtonText {
-    font-size: 0.825rem;
-    color: #333;
+  font-size: 0.825rem;
+  color: #333;
 }
 
-.cl-userButtonPopoverFooter, .cl-userButtonPopoverActionButton__manageAccount {
-    display: none;
+.cl-userButtonPopoverFooter,
+.cl-userButtonPopoverActionButton__manageAccount {
+  display: none;
 }
-  
-  .cl-formButtonPrimary:hover,
-  .cl-formButtonPrimary:focus,
-  .cl-formButtonPrimary:active {
-    background: rgb(253, 245, 242);
-  }
+
+.cl-formButtonPrimary:hover,
+.cl-formButtonPrimary:focus,
+.cl-formButtonPrimary:active {
+  background: rgb(253, 245, 242);
+}
+
+input:focus {
+  outline: 1px solid #979794;
+}
