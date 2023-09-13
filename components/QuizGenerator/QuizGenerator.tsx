@@ -1,16 +1,22 @@
 "use client";
 import { z } from "zod";
+import { useMutation } from "convex/react";
 import { useForm } from "react-hook-form";
-import { useAction } from "convex/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { quizSchema } from "@/schema/QuizSchmea";
 import { LuCopyCheck, LuBookOpen, LuPuzzle, LuFileUp } from "react-icons/lu";
 import { api } from "@/convex/_generated/api";
+import { useRouter } from "next/navigation";
+import useStoreUserEffect from "@/hooks/useStoreUserEffect";
+import { Id } from "@/convex/_generated/dataModel";
 
 type FormData = z.infer<typeof quizSchema>;
 
 export default function QuizGenerator() {
-  const handleQuiz = useAction(api.quiz.handleQuiz);
+  const userId = useStoreUserEffect();
+  const router = useRouter();
+  const createQuiz = useMutation(api.quiz.createQuiz);
+
   const {
     register,
     handleSubmit,
@@ -27,13 +33,15 @@ export default function QuizGenerator() {
     },
   });
 
-  const values = getValues();
-
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     //Call the api
-    console.log(data);
-    handleQuiz({ data });
+    const quizId = await createQuiz({
+      userId: userId as Id<"users">,
+      data: data,
+      response: "",
+    });
     reset();
+    router.push(`/quizify/${quizId}`);
   };
 
   const Topic = () => {
@@ -99,6 +107,8 @@ export default function QuizGenerator() {
       </div>
     );
   };
+
+  // console.log(entries);
 
   return (
     <form
