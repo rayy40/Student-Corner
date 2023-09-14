@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-input:focus {
+input:focus,
+textarea:focus {
   outline: 1px solid #979794;
 }
 

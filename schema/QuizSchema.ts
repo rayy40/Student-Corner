@@ -23,7 +23,7 @@ export const quizSchema = z.object({
       return file;
     })
     .optional(),
-  type: z.enum(["mcq", "hybrid_response", "short_answer"]),
+  type: z.enum(["mcq", "true_false", "short_answer"]),
   questions: z
     .number()
     .min(1)

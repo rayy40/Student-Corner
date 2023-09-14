@@ -148,10 +148,10 @@ export default function QuizGenerator() {
         </div>
         <div
           onClick={() =>
-            setValue("type", "hybrid_response", { shouldValidate: true })
+            setValue("type", "true_false", { shouldValidate: true })
           }
           className={`${
-            getValues("type") === "hybrid_response"
+            getValues("type") === "true_false"
               ? "bg-light-gray"
               : "bg-input-background"
           } text-xs p-2.5 w-1/2 flex items-center justify-center cursor-pointer gap-2 shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)]`}
