@@ -15,6 +15,14 @@ export default defineSchema({
       type: v.string(),
       file: v.optional(v.any()),
     }),
-    response: v.string(),
+    response: v.array(
+      v.object({
+        question: v.string(),
+        answer: v.string(),
+        yourAnswer: v.optional(v.string()),
+        options: v.array(v.string()),
+      })
+    ),
+    options: v.optional(v.any()),
   }),
 });

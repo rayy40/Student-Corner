@@ -2,11 +2,10 @@ import { v } from "convex/values";
 import {
   internalAction,
   internalMutation,
-  internalQuery,
   mutation,
   query,
 } from "./_generated/server";
-import { internal, api } from "./_generated/api";
+import { internal } from "./_generated/api";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -31,7 +30,14 @@ export const createQuiz = mutation({
       type: v.string(),
       file: v.optional(v.any()),
     }),
-    response: v.string(),
+    response: v.array(
+      v.object({
+        question: v.string(),
+        answer: v.string(),
+        yourAnswer: v.optional(v.string()),
+        options: v.array(v.string()),
+      })
+    ),
   },
   handler: async (ctx, args) => {
     if (!args.userId) {
@@ -40,12 +46,11 @@ export const createQuiz = mutation({
     const id = await ctx.db.insert("quiz", {
       userId: args.userId,
       input: args.data,
-      response: args.response ?? "",
+      response: args.response ?? [],
     });
     ctx.scheduler.runAfter(0, internal.quiz.generateQuiz, {
       quizId: id,
       input: args.data,
-      response: args.response ?? "",
     });
     return id;
   },
@@ -61,7 +66,6 @@ export const generateQuiz = internalAction({
       type: v.string(),
       file: v.optional(v.any()),
     }),
-    response: v.string(),
   },
   handler: async (ctx, args) => {
     let prompt = "";
@@ -79,9 +83,10 @@ export const generateQuiz = internalAction({
       model: "gpt-3.5-turbo",
     });
     const input = args.input;
-    const response =
-      completion.choices[0].message.content ??
-      "Unable to generate a quiz for you at this time.";
+    const response = completion.choices[0].message.content
+      ? JSON.parse(completion.choices[0].message.content)
+      : "Unable to generate a quiz for you at this time.";
+
     await ctx.runMutation(internal.quiz.insertResponse, {
       quizId: args.quizId,
       input,
@@ -100,11 +105,18 @@ export const insertResponse = internalMutation({
       type: v.string(),
       file: v.optional(v.any()),
     }),
-    response: v.string(),
+    response: v.array(
+      v.object({
+        question: v.string(),
+        answer: v.string(),
+        yourAnswer: v.optional(v.string()),
+        options: v.array(v.string()),
+      })
+    ),
   },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.quizId, {
-      response: args.response ?? "",
+      response: args.response ?? [],
     });
   },
 });
@@ -118,5 +130,24 @@ export const getCurrentQuiz = query({
       .collect();
 
     return entry;
+  },
+});
+
+export const updateCurrentQuiz = mutation({
+  args: {
+    quizId: v.id("quiz"),
+    response: v.array(
+      v.object({
+        question: v.string(),
+        answer: v.string(),
+        yourAnswer: v.string(),
+        options: v.array(v.string()),
+      })
+    ),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.quizId, {
+      response: args.response,
+    });
   },
 });

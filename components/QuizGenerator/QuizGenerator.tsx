@@ -3,12 +3,13 @@ import { z } from "zod";
 import { useMutation } from "convex/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { quizSchema } from "@/schema/QuizSchmea";
+import { quizSchema } from "@/schema/QuizSchema";
 import { LuCopyCheck, LuBookOpen, LuPuzzle, LuFileUp } from "react-icons/lu";
 import { api } from "@/convex/_generated/api";
 import { useRouter } from "next/navigation";
 import useStoreUserEffect from "@/hooks/useStoreUserEffect";
 import { Id } from "@/convex/_generated/dataModel";
+import { useQuizStore } from "@/context/store";
 
 type FormData = z.infer<typeof quizSchema>;
 
@@ -16,6 +17,7 @@ export default function QuizGenerator() {
   const userId = useStoreUserEffect();
   const router = useRouter();
   const createQuiz = useMutation(api.quiz.createQuiz);
+  const { setQuizId } = useQuizStore();
 
   const {
     register,
@@ -38,8 +40,9 @@ export default function QuizGenerator() {
     const quizId = await createQuiz({
       userId: userId as Id<"users">,
       data: data,
-      response: "",
+      response: [],
     });
+    setQuizId(quizId);
     reset();
     router.push(`/quizify/${quizId}`);
   };
@@ -107,8 +110,6 @@ export default function QuizGenerator() {
       </div>
     );
   };
-
-  // console.log(entries);
 
   return (
     <form
