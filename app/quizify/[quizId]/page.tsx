@@ -10,7 +10,7 @@ import Loading from "@/components/Loading/Loading";
 
 interface Quiz {
   answer: string;
-  options: string[];
+  options?: string[];
   question: string;
   yourAnswer?: string;
 }
@@ -44,6 +44,12 @@ export default function Quiz(props: { params: { quizId: Id<"quiz"> } }) {
     setQuiz(updatedQuiz);
   };
 
+  const handleShortAnswer = (questionIndex: number, shortAnswer: string) => {
+    const updatedQuiz = [...quiz];
+    updatedQuiz[questionIndex].yourAnswer = shortAnswer;
+    setQuiz(updatedQuiz);
+  };
+
   const handleSubmit = () => {
     const transformedQuiz = quiz.map((question) => ({
       ...question,
@@ -62,7 +68,7 @@ export default function Quiz(props: { params: { quizId: Id<"quiz"> } }) {
     }
   }, [quizEntries]);
 
-  if (!quizEntries?.[0]?.response) {
+  if (!quizEntries?.[0]?.response || quiz.length === 0) {
     return (
       <div className="h-screen w-full flex items-center justify-center">
         <Loading />
@@ -84,7 +90,20 @@ export default function Quiz(props: { params: { quizId: Id<"quiz"> } }) {
           <span className="font-light text-xs">{id + 1}.</span>
           <p>{q.question}</p>
         </div>
-        {q.options.map((option, optionIdx) => (
+        {quizEntries?.[0]?.input?.type === "short_answer" && (
+          <div
+            className={`${id === questionVisible ? "flex" : "hidden"} w-full`}
+          >
+            <textarea
+              rows={5}
+              value={q.yourAnswer ?? ""}
+              className="w-full text-sm p-2 font-normal bg-input-background shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md"
+              placeholder="Enter your answer"
+              onChange={(e) => handleShortAnswer(id, e.target.value)}
+            />
+          </div>
+        )}
+        {q?.options?.map((option, optionIdx) => (
           <div
             key={optionIdx}
             className={`${id === questionVisible ? "flex" : "hidden"} ${

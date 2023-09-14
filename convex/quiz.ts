@@ -12,11 +12,28 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const format = [
+const MCQformat = [
   {
     question: "Who is Luke Skywalker's father?",
     options: ["Obi-Wan Kenobi", "Emperor Palpatine", "Darth Vadar", "Yoda"],
     answer: "Darth Vadar",
+  },
+];
+
+const ShortAnswerformat = [
+  {
+    question: "How do amphibians breathe?",
+    answer:
+      "Most amphibians breathe through their skin, which allows them to absorb oxygen directly from the environment. They also have lungs for breathing when on land.",
+  },
+];
+
+const TrueFalseformat = [
+  {
+    question:
+      "Amphibians are cold-blooded animals, meaning their body temperature varies with their environment.",
+    options: ["True", "False"],
+    answer: "True",
   },
 ];
 
@@ -35,7 +52,7 @@ export const createQuiz = mutation({
         question: v.string(),
         answer: v.string(),
         yourAnswer: v.optional(v.string()),
-        options: v.array(v.string()),
+        options: v.optional(v.array(v.string())),
       })
     ),
   },
@@ -75,7 +92,25 @@ export const generateQuiz = internalAction({
       } type questions related to ${
         args.input.topic
       } with three incorrect options and only one correct option and format the response as JSON in the shape of ${JSON.stringify(
-        format
+        MCQformat
+      )}.`;
+    }
+    if (args.input.type === "short_answer") {
+      prompt = `Generate ${args.input.questions} ${
+        args.input.type
+      } type questions related to ${
+        args.input.topic
+      } format the response as JSON in the shape of ${JSON.stringify(
+        ShortAnswerformat
+      )}.`;
+    }
+    if (args.input.type === "true_false") {
+      prompt = `Generate ${args.input.questions} ${
+        args.input.type
+      } type questions related to ${
+        args.input.topic
+      } format the response as JSON in the shape of ${JSON.stringify(
+        TrueFalseformat
       )}.`;
     }
     const completion = await openai.chat.completions.create({
@@ -110,7 +145,7 @@ export const insertResponse = internalMutation({
         question: v.string(),
         answer: v.string(),
         yourAnswer: v.optional(v.string()),
-        options: v.array(v.string()),
+        options: v.optional(v.array(v.string())),
       })
     ),
   },
@@ -141,7 +176,7 @@ export const updateCurrentQuiz = mutation({
         question: v.string(),
         answer: v.string(),
         yourAnswer: v.string(),
-        options: v.array(v.string()),
+        options: v.optional(v.array(v.string())),
       })
     ),
   },
@@ -149,5 +184,17 @@ export const updateCurrentQuiz = mutation({
     await ctx.db.patch(args.quizId, {
       response: args.response,
     });
+  },
+});
+
+export const getQuizHistory = query({
+  args: { userId: v.id("users") },
+  handler: async (ctx, args) => {
+    const entry = await ctx.db
+      .query("quiz")
+      .filter((q) => q.eq(q.field("userId"), args.userId))
+      .collect();
+
+    return entry;
   },
 });

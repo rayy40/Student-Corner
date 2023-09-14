@@ -20,7 +20,7 @@ export default defineSchema({
         question: v.string(),
         answer: v.string(),
         yourAnswer: v.optional(v.string()),
-        options: v.array(v.string()),
+        options: v.optional(v.array(v.string())),
       })
     ),
     options: v.optional(v.any()),
