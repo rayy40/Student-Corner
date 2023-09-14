@@ -2,54 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-.cl-card {
-  box-shadow: unset;
-  padding-bottom: 2em;
-}
-
-.cl-userButtonPopoverCard {
-  width: unset;
-  box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.35);
-  border-radius: 12px;
-  padding: 0;
-}
-
-.cl-userPreview {
-  margin: 0;
-  padding: 1em;
-  border-bottom: 1px solid rgba(15, 15, 15, 0.15);
-}
-
-.cl-userPreviewAvatarContainer {
-  display: none;
-}
-
-.cl-userButtonPopoverActionButton__signOut {
-  padding-left: 0.5em;
-  gap: 0em;
-  align-items: flex-end;
-}
-
-.cl-userButtonPopoverActionButtonIcon {
-  color: gray;
-}
-
-.cl-userButtonPopoverActionButtonText {
-  font-size: 0.825rem;
-  color: #333;
-}
-
-.cl-userButtonPopoverFooter,
-.cl-userButtonPopoverActionButton__manageAccount {
-  display: none;
-}
-
-.cl-formButtonPrimary:hover,
-.cl-formButtonPrimary:focus,
-.cl-formButtonPrimary:active {
-  background: rgb(253, 245, 242);
-}
-
 input:focus {
   outline: 1px solid #979794;
+}
+
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 4px solid #979794;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #979794 transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
