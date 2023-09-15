@@ -7,6 +7,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { FaCaretRight, FaCaretLeft } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading/Loading";
+import Question from "@/components/Question/Question";
 
 interface Quiz {
   answer: string;
@@ -35,20 +36,11 @@ export default function Quiz(props: { params: { quizId: Id<"quiz"> } }) {
     }
   };
 
-  const handleSelectedAnsswer = (
-    questionIndex: number,
-    selectedOption: string
-  ) => {
-    const updatedQuiz = [...quiz];
-    updatedQuiz[questionIndex].yourAnswer = selectedOption;
-    setQuiz(updatedQuiz);
-  };
-
-  const handleShortAnswer = (questionIndex: number, shortAnswer: string) => {
-    const updatedQuiz = [...quiz];
-    updatedQuiz[questionIndex].yourAnswer = shortAnswer;
-    setQuiz(updatedQuiz);
-  };
+  //   const handleShortAnswer = (questionIndex: number, shortAnswer: string) => {
+  //     const updatedQuiz = [...quiz];
+  //     updatedQuiz[questionIndex].yourAnswer = shortAnswer;
+  //     setQuiz(updatedQuiz);
+  //   };
 
   const handleSubmit = () => {
     const transformedQuiz = quiz.map((question) => ({
@@ -78,51 +70,6 @@ export default function Quiz(props: { params: { quizId: Id<"quiz"> } }) {
 
   const input = quizEntries?.[0]?.input;
 
-  const Question = () => {
-    return quiz?.map((q: Quiz, id: number) => (
-      <>
-        <div
-          key={id}
-          className={`${
-            id === questionVisible ? "flex" : "hidden"
-          } w-full bg-[rgb(201,203,202)] shadow-[0px_3px_6px_-2px_rgb(0,0,0,0.15),0px_-3px_6px_-2px_rgb(0,0,0,0.15),3px_0px_6px_-2px_rgb(0,0,0,0.15),-3px_0px_6px_-2px_rgb(0,0,0,0.15)] p-4 rounded-md gap-6 items-center overflow-hidden`}
-        >
-          <span className="font-light text-xs">{id + 1}.</span>
-          <p>{q.question}</p>
-        </div>
-        {quizEntries?.[0]?.input?.type === "short_answer" && (
-          <div
-            className={`${id === questionVisible ? "flex" : "hidden"} w-full`}
-          >
-            <textarea
-              rows={5}
-              value={q.yourAnswer ?? ""}
-              className="w-full text-sm p-2 font-normal bg-input-background shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md"
-              placeholder="Enter your answer"
-              onChange={(e) => handleShortAnswer(id, e.target.value)}
-            />
-          </div>
-        )}
-        {q?.options?.map((option, optionIdx) => (
-          <div
-            key={optionIdx}
-            className={`${id === questionVisible ? "flex" : "hidden"} ${
-              q.yourAnswer === option
-                ? "bg-light-gray"
-                : "bg-white hover:bg-[rgba(0,0,0,0.05)]"
-            } border border-light-gray w-full p-4 py-3 rounded-md gap-3 items-center cursor-pointer`}
-            onClick={() => handleSelectedAnsswer(id, option)}
-          >
-            <span className="text-xs font-light p-2 py-1 rounded-md border border-dark-gray">
-              {String.fromCharCode(97 + optionIdx)}
-            </span>
-            <p>{option}</p>
-          </div>
-        ))}
-      </>
-    ));
-  };
-
   return (
     <div className="mx-auto h-screen max-w-[550px] flex flex-col gap-2 items-center justify-center">
       <div className="w-full flex justify-between items-center py-3 text-xs">
@@ -135,7 +82,17 @@ export default function Quiz(props: { params: { quizId: Id<"quiz"> } }) {
           <p className="text-slate text-xs">29:30</p>
         </div>
       </div>
-      <Question />
+      {quiz?.map((q: Quiz, id: number) => (
+        <Question
+          key={id}
+          id={id}
+          q={q}
+          questionVisible={questionVisible}
+          quiz={quiz}
+          setQuiz={setQuiz}
+          type={quizEntries?.[0]?.input?.type}
+        />
+      ))}
       <div className="w-full text-xs mt-4 flex items-center justify-center gap-4">
         <button
           onClick={() => updateQuestion("decrement")}
