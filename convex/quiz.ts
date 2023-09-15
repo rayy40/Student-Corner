@@ -100,7 +100,7 @@ export const generateQuiz = internalAction({
         args.input.type
       } type questions related to ${
         args.input.topic
-      } format the response as JSON in the shape of ${JSON.stringify(
+      } with answers being maximum around 18-25 words and format the response as JSON in the shape of ${JSON.stringify(
         ShortAnswerformat
       )}.`;
     }

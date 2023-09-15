@@ -157,7 +157,7 @@ export default function QuizGenerator() {
           } text-xs p-2.5 w-1/2 flex items-center justify-center cursor-pointer gap-2 shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)]`}
         >
           <LuPuzzle />
-          Hybrid Response
+          True False
         </div>
         <div
           onClick={() =>
