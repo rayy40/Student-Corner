@@ -16,6 +16,7 @@ export const quizSchema = z.object({
   paragraph: z
     .string()
     .min(3, { message: "Paragraph must be at least 3 characters long." })
+    .max(5000, { message: "Text cannot be more than 5000 characters." })
     .optional(),
   file: z
     .custom((file) => {
