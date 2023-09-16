@@ -7,35 +7,16 @@ import {
 } from "./_generated/server";
 import { internal } from "./_generated/api";
 import OpenAI from "openai";
+import {
+  MCQformat,
+  PreProcessText,
+  ShortAnswerformat,
+  TrueFalseformat,
+} from "../lib/utils";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-const MCQformat = [
-  {
-    question: "Who is Luke Skywalker's father?",
-    options: ["Obi-Wan Kenobi", "Emperor Palpatine", "Darth Vadar", "Yoda"],
-    answer: "Darth Vadar",
-  },
-];
-
-const ShortAnswerformat = [
-  {
-    question: "How do amphibians breathe?",
-    answer:
-      "Most amphibians breathe through their skin, which allows them to absorb oxygen directly from the environment. They also have lungs for breathing when on land.",
-  },
-];
-
-const TrueFalseformat = [
-  {
-    question:
-      "Amphibians are cold-blooded animals, meaning their body temperature varies with their environment.",
-    options: ["True", "False"],
-    answer: "True",
-  },
-];
 
 export const createQuiz = mutation({
   args: {
@@ -86,7 +67,7 @@ export const generateQuiz = internalAction({
   },
   handler: async (ctx, args) => {
     let prompt = "";
-    if (args.input.type === "mcq") {
+    if (args.input.type === "mcq" && args.input.topic) {
       prompt = `Generate ${args.input.questions} ${
         args.input.type
       } type questions related to ${
@@ -95,7 +76,20 @@ export const generateQuiz = internalAction({
         MCQformat
       )}.`;
     }
-    if (args.input.type === "short_answer") {
+    if (args.input.type === "mcq" && args.input.paragraph) {
+      prompt = `You are a quiz generator. Your work is to generate ${
+        args.input.questions
+      } ${args.input.type} type questions related to the below text
+
+      Text:
+      '''
+      ${args.input.paragraph}
+      '''     
+        There should be three incorrect options and only one correct option and format the response as JSON in the shape of ${JSON.stringify(
+          MCQformat
+        )}.`;
+    }
+    if (args.input.type === "short_answer" && args.input.topic) {
       prompt = `Generate ${args.input.questions} ${
         args.input.type
       } type questions related to ${
@@ -103,6 +97,19 @@ export const generateQuiz = internalAction({
       } with answers being maximum around 18-25 words and format the response as JSON in the shape of ${JSON.stringify(
         ShortAnswerformat
       )}.`;
+    }
+    if (args.input.type === "short_answer" && args.input.paragraph) {
+      prompt = `You are a quiz generator. Your work is to generate ${
+        args.input.questions
+      } ${args.input.type} type questions related to the below text
+
+      Text:
+      ------
+      ${PreProcessText(args.input.paragraph)}
+      ------    
+        Answers should be maximum of 18-25 words and format the response as JSON in the shape of ${JSON.stringify(
+          MCQformat
+        )}.`;
     }
     if (args.input.type === "true_false") {
       prompt = `Generate ${args.input.questions} ${
@@ -170,6 +177,7 @@ export const getCurrentQuiz = query({
 
 export const updateCurrentQuiz = mutation({
   args: {
+    score: v.optional(v.number()),
     quizId: v.id("quiz"),
     response: v.array(
       v.object({
@@ -182,6 +190,7 @@ export const updateCurrentQuiz = mutation({
   },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.quizId, {
+      score: args.score,
       response: args.response,
     });
   },
