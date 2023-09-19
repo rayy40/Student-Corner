@@ -5,7 +5,7 @@ interface Quiz {
   question: string;
 }
 
-import { stemmer } from "@/lib/porterStemmingAlgo";
+import { stemmer } from "./porterStemmingAlgo";
 import { stopwords, contractionsDict } from "./helpers";
 
 export const calculateScore = (quizData: Quiz[]): number => {
@@ -19,30 +19,6 @@ export const calculateScore = (quizData: Quiz[]): number => {
 
   return score;
 };
-export const MCQformat = [
-  {
-    question: "Who is Luke Skywalker's father?",
-    options: ["Obi-Wan Kenobi", "Emperor Palpatine", "Darth Vadar", "Yoda"],
-    answer: "Darth Vadar",
-  },
-];
-
-export const ShortAnswerformat = [
-  {
-    question: "How do amphibians breathe?",
-    answer:
-      "Most amphibians breathe through their skin, which allows them to absorb oxygen directly from the environment. They also have lungs for breathing when on land.",
-  },
-];
-
-export const TrueFalseformat = [
-  {
-    question:
-      "Amphibians are cold-blooded animals, meaning their body temperature varies with their environment.",
-    options: ["True", "False"],
-    answer: "True",
-  },
-];
 
 export const PreProcessText = (text: string) => {
   const pattern = new RegExp(
@@ -72,6 +48,7 @@ export const PreProcessText = (text: string) => {
 };
 
 export const TokenizeText = (text: string) => {
+  text = text.replace(/\s+/g, "");
   text = text.toLowerCase();
   let words = text.split(/\W+/);
   words = [...new Set(words)];
