@@ -10,7 +10,7 @@ module.exports = {
       white: "#ffffff",
       slate: "#121212",
       "light-gray": "#e7e6e5",
-      "hover-light-gray": "#d6d6d5",
+      "hover-light-gray": "rgba(55,53,47,0.08)",
       "input-background": "rgba(242, 241, 238, 0.6)",
       "sign-in": "rgb(235,87,87)",
       "sign-in-background": "rgb(253,245,242)",
