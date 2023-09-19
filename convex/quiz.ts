@@ -7,12 +7,8 @@ import {
 } from "./_generated/server";
 import { internal } from "./_generated/api";
 import OpenAI from "openai";
-import {
-  MCQformat,
-  PreProcessText,
-  ShortAnswerformat,
-  TrueFalseformat,
-} from "../lib/utils";
+import { PreProcessText } from "../lib/utils";
+import { MCQformat, ShortAnswerformat, TrueFalseformat } from "../lib/helpers";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
