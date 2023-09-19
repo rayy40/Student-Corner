@@ -8,6 +8,7 @@ import { FaCaretRight, FaCaretLeft } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading/Loading";
 import Question from "@/components/Question/Question";
+import { PreProcessText, TokenizeText, calculateScore } from "@/lib/utils";
 
 interface Quiz {
   answer: string;
@@ -36,18 +37,16 @@ export default function Quiz(props: { params: { quizId: Id<"quiz"> } }) {
     }
   };
 
-  //   const handleShortAnswer = (questionIndex: number, shortAnswer: string) => {
-  //     const updatedQuiz = [...quiz];
-  //     updatedQuiz[questionIndex].yourAnswer = shortAnswer;
-  //     setQuiz(updatedQuiz);
-  //   };
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const transformedQuiz = quiz.map((question) => ({
       ...question,
-      yourAnswer: question.yourAnswer || "", // Ensure yourAnswer is a string
+      yourAnswer: question.yourAnswer || "",
     }));
+
+    const score = calculateScore(transformedQuiz);
+
     submitOptions({
+      score: score,
       response: transformedQuiz,
       quizId: props.params.quizId,
     });
