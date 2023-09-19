@@ -10,6 +10,15 @@ import {
   todoList,
 } from "../lib/helpers";
 
+const MarkdownIt = require("markdown-it");
+const mdOptions = {
+  html: true,
+  langPrefix: "highlight ",
+  linkify: false,
+  breaks: false,
+};
+const markdownIt = new MarkdownIt(mdOptions);
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -57,10 +66,14 @@ export const generateContent = action({
       messages: [{ role: "user", content: prompt }],
       model: "gpt-3.5-turbo",
     });
+    const markdownToHTMl: string = markdownIt.render(
+      response.choices[0].message.content
+    );
+    console.log(markdownToHTMl);
 
     await ctx.runMutation(api.aipen.patchContent, {
       documentId: args.documentId,
-      content: response.choices[0].message.content ?? "",
+      content: markdownToHTMl,
     });
   },
 });
@@ -80,7 +93,7 @@ export const getDocument = query({
     const entry = await ctx.db
       .query("aipen")
       .filter((q) => q.eq(q.field("_id"), args.documentId))
-      .collect();
+      .take(1);
     return entry;
   },
 });
