@@ -141,6 +141,19 @@ export const stopwords = [
   "now",
 ];
 
+export const textColors = {
+  default: "#37352F",
+  gray: "#808080",
+  brown: "#A52A2A",
+  orange: "#FFA500",
+  red: "#FF0000",
+  green: "#008000",
+  yellow: "#FFFF00",
+  blue: "#0000FF",
+  purple: "#800080",
+  pink: "#FFC0CB",
+};
+
 export const MCQformat = [
   {
     question: "Who is Luke Skywalker's father?",
@@ -168,43 +181,41 @@ export const TrueFalseformat = [
 
 export const essayOrBlogPrompt = (topic: string) => {
   return `${topic}.
-  Word Limit should be maximum 400-500 words.
-  Format the response using HTML syntax.
-  Ensure to include title, introduction, body and conclusion and divide the body content into three paragraphs, each having a subheading of h3 tag of its own.
-  Do not include any image tags or anything, just write the body tag.`;
+  Format the response using Markdown, with '# Title','## Introduction','## Body' and '## Conclusion' headings to separate the paragraphs
+  Also separate the heading under body using markdown.
+  Word Limit should be maximum 400-500 words`;
 };
 
 export const creativeStoryPrompt = (topic: string) => {
   return `${topic}
-  Word Limit should be maximum 400-500 words.
-  Format the response using HTML syntax.
-  Ensure to include title and that if the p tag is consisting of more than 50 words, wrap it under a div tag.
-  Do not include any image tags or anything, just write the body tag.`;
+  Format the response using Markdown, with '# Title' headings
+  Word Limit should be maximum 400-500 words`;
 };
 
 export const prosAndCons = (topic: string) => {
   return `${topic}.
   Include up to 5 points for each category, with a brief description for each point. 
-  Format the response using HTML syntax with a title and pros and cons being in a h2 tag.`;
+  Format the response using Markdown, with '## Pros' and '## Cons' headings to separate the lists`;
 };
 
 export const todoList = (topic: string) => {
   return `${topic}
-  Format the response using HTML syntax and give a title and list the tasks with checkboxes.
-  There should be a maximum of 10 tasks.
+  Format the response using Markdown, with '# Title' and list the tasks with checkboxes as shown below.
+  - [ ]  Create a study schedule
+  There should be a maximum of 10-12 tasks.
   `;
 };
 
 export const brainstormIdeas = (topic: string) => {
   return `${topic}
   Include up to 10 points with a brief description for each point.
-  Format the response using HTML syntax and provide a title.
+  Format the response using Markdown.
   `;
 };
 
 export const pressRelease = (topic: string) => {
   return `${topic}
-  Format the response using HTML syntax and provide a title.
+  Format the response using Markdown with '# Title' and '## Contact'.
   Contact(should be at the end):
   [Your Name]
   [Your Title]
