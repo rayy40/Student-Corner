@@ -29,7 +29,6 @@ export default function QuizGenerator() {
   } = useForm<FormData>({
     resolver: zodResolver(quizSchema),
     defaultValues: {
-      topic: "",
       questions: 3,
       type: "mcq",
     },
@@ -69,13 +68,13 @@ export default function QuizGenerator() {
   const Paragraph = () => {
     return (
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-slate" htmlFor="Topic">
+        <label className="text-sm text-slate" htmlFor="paragraph">
           Paragraph
         </label>
         <textarea
           rows={6}
           className="text-sm p-2 font-normal bg-input-background shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md"
-          placeholder="Enter your paragraph"
+          placeholder="Enter your text..."
           {...register("paragraph")}
         />
         {errors.paragraph && (
@@ -116,9 +115,9 @@ export default function QuizGenerator() {
       onSubmit={handleSubmit(onSubmit)}
       className="mt-10 w-full flex flex-col gap-4"
     >
-      <Topic />
-      {/* <Paragraph /> */}
-      {/* <File /> */}
+      {/* <Topic />
+      <Paragraph /> */}
+      <File />
       <div className="flex flex-col gap-1">
         <label className="text-sm text-slate" htmlFor="Topic">
           Questions
