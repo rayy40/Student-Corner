@@ -2,13 +2,6 @@ import OpenAI from "openai";
 import { action, mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { api } from "./_generated/api";
-import {
-  brainstormIdeas,
-  creativeStoryPrompt,
-  essayOrBlogPrompt,
-  prosAndCons,
-  todoList,
-} from "../lib/helpers";
 
 const MarkdownIt = require("markdown-it");
 const mdOptions = {
@@ -50,20 +43,15 @@ export const createDocument = mutation({
 export const generateContent = action({
   args: { documentId: v.id("aipen"), input: v.string() },
   handler: async (ctx, args) => {
-    let prompt = "";
-    if (args.input.includes("essay") || args.input.includes("blog")) {
-      prompt = essayOrBlogPrompt(args.input);
-    } else if (args.input.includes("creative story")) {
-      prompt = creativeStoryPrompt(args.input);
-    } else if (args.input.includes("pros and cons")) {
-      prompt = prosAndCons(args.input);
-    } else if (args.input.includes("todo list")) {
-      prompt = todoList(args.input);
-    } else if (args.input.includes("brainstorm")) {
-      prompt = brainstormIdeas(args.input);
-    }
     const response = await openai.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a professor of English. You are going to help me write essays, blogs, creative stories, pros and cons of a topic, todo list and brainstorm ideas on a topic.Use the topic below to generate the same. Keep your answer under 500 words. Format the response using markdown, with '# Title' for each page and the rest as necessary. Be accurate, helpful, concise, and clear. ",
+        },
+        { role: "user", content: args.input },
+      ],
       model: "gpt-3.5-turbo",
     });
     const markdownToHTMl: string = markdownIt.render(

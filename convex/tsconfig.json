@@ -9,15 +9,15 @@
     "strict": true,
 
     /* These compiler options are required by Convex */
-    "target": "ESNext",
+    "target": "ES6",
     "lib": ["ES2021", "dom"],
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["./**/*"],
+  "include": ["./**/*", "lib/pinecone.ts"],
   "exclude": ["./_generated"]
 }

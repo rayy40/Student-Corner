@@ -7,24 +7,20 @@ export default defineSchema({
     tokenIdentifier: v.string(),
   }).index("by_token", ["tokenIdentifier"]),
   chatbot: defineTable({
-    storageId: v.string(),
     userId: v.id("users"),
-    format: v.string(),
+    chatId: v.string(),
+    title: v.optional(v.string()),
+    url: v.optional(v.string()),
+    content: v.string(),
+    embedding: v.array(v.float64()),
+  }).vectorIndex("by_embedding", {
+    vectorField: "embedding",
+    dimensions: 1536,
+    filterFields: ["chatId"],
   }),
   aipen: defineTable({
     userId: v.id("users"),
     content: v.optional(v.string()),
-  }),
-  sources: defineTable({
-    name: v.string(),
-    chunkIds: v.array(v.id("chunks")),
-    saved: v.boolean(),
-  }),
-  chunks: defineTable({
-    text: v.string(),
-    sourceId: v.id("sources"),
-    chunkIndex: v.number(),
-    lines: v.object({ from: v.number(), to: v.number() }),
   }),
   quiz: defineTable({
     userId: v.id("users"),

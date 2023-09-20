@@ -11,6 +11,13 @@ interface UserState {
   setUserId: (userId: Id<"users">) => void;
 }
 
+interface ChatbotState {
+  chatId: string | null;
+  setChatId: (chatId: string) => void;
+  answer: string;
+  setAnswer: (answer: string) => void;
+}
+
 interface NotepadState {
   context: string;
   setContext: (context: string) => void;
@@ -23,6 +30,13 @@ interface NotepadState {
 export const useUserStore = create<UserState>()((set) => ({
   userId: null,
   setUserId: (userId) => set({ userId }),
+}));
+
+export const useChatStore = create<ChatbotState>()((set) => ({
+  answer: "",
+  setAnswer: (answer) => set({ answer }),
+  chatId: null,
+  setChatId: (chatId) => set({ chatId }),
 }));
 
 export const useQuizStore = create<QuizState>()((set) => ({

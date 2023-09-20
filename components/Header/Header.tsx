@@ -53,7 +53,7 @@ export default function Header() {
   };
 
   return (
-    <div className="fixed top-0 flex justify-between items-center w-screen bg-white py-3 pl-6 pr-8 h-14 border-b border-light-gray shadow">
+    <div className="fixed z-10 top-0 flex justify-between items-center w-screen bg-white py-3 pl-6 pr-8 h-14 border-b border-light-gray shadow">
       Header
       {isAuthenticated ? (
         <UserProfile />

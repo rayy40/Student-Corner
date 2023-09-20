@@ -16,10 +16,7 @@ import type {
 } from "convex/server";
 import type * as aipen from "../aipen";
 import type * as chatbot from "../chatbot";
-import type * as lib_embeddings from "../lib/embeddings";
-import type * as lib_pinecone from "../lib/pinecone";
 import type * as quiz from "../quiz";
-import type * as sources from "../sources";
 import type * as users from "../users";
 
 /**
@@ -33,10 +30,7 @@ import type * as users from "../users";
 declare const fullApi: ApiFromModules<{
   aipen: typeof aipen;
   chatbot: typeof chatbot;
-  "lib/embeddings": typeof lib_embeddings;
-  "lib/pinecone": typeof lib_pinecone;
   quiz: typeof quiz;
-  sources: typeof sources;
   users: typeof users;
 }>;
 export declare const api: FilterApi<

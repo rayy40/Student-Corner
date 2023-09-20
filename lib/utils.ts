@@ -56,3 +56,23 @@ export const TokenizeText = (text: string) => {
   let stemmedWords = words.map((word) => stemmer(word));
   return stemmedWords;
 };
+
+export const isValidUrl = (url: string) => {
+  try {
+    new URL(url);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const getUrlFromString = (str: string) => {
+  if (isValidUrl(str)) return str;
+  try {
+    if (str.includes(".") && !str.includes(" ")) {
+      return new URL(`https://${str}`).toString();
+    }
+  } catch (e) {
+    return null;
+  }
+};
