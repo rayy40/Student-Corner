@@ -29,8 +29,6 @@ export default function Chatbot() {
     }
   }, [user, userId, router]);
 
-  console.log(userId);
-
   const {
     register,
     handleSubmit,
