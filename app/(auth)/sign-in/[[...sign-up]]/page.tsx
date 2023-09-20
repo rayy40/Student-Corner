@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { useSignIn, SignIn } from "@clerk/clerk-react";
 import { useRouter } from "next/navigation";
-import { FaGoogle } from "react-icons/fa6";
+// import { FaGoogle } from "react-icons/fa6";
 import Link from "next/link";
+import Loading from "@/components/Loading/Loading";
 
 export default function SignInPage() {
   const { isLoaded, signIn, setActive } = useSignIn();
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -16,11 +18,12 @@ export default function SignInPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (!isLoaded) {
+    if (!isLoaded || isLoading) {
       return;
     }
 
     try {
+      setIsLoading(true);
       const result = await signIn.create({
         identifier: email,
         password,
@@ -28,7 +31,6 @@ export default function SignInPage() {
 
       if (result.status === "complete") {
         setError(null);
-        console.log(result);
         await setActive({ session: result.createdSessionId });
         router.push("/");
       } else {
@@ -38,8 +40,18 @@ export default function SignInPage() {
     } catch (err: any) {
       console.error(JSON.stringify(err, null, 2));
       setError(err?.errors[0].message);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="h-screen 2-full flex items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="w-100 h-screen flex flex-col justify-center items-center bg-white">
@@ -76,7 +88,7 @@ export default function SignInPage() {
           >
             Sign In
           </button>
-          <div className="relative mt-4 border-t border-light-gray">
+          {/* <div className="relative mt-4 border-t border-light-gray">
             <span className="text-xs bg-white text-light-gray px-2 absolute top-[-12.5px] left-[50%] translate-x-[-50%] ">
               or
             </span>
@@ -84,7 +96,7 @@ export default function SignInPage() {
               <FaGoogle color={"gray"} />
               Sign in with Google
             </button>
-          </div>
+          </div> */}
         </form>
         <div className="flex mt-2 items-center justify-center">
           <p className="text-xs text-dark-gray">
