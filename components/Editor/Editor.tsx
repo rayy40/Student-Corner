@@ -1,51 +1,69 @@
 "use client";
 
 import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import AiInput from "../AiInput/AiInput";
 import { useNotepadStore } from "@/context/store";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { BubbleMenu } from "./BubbleMenu/BubbleMenu";
-import Link from "@tiptap/extension-link";
-import Text from "@tiptap/extension-text";
-import TextStyle from "@tiptap/extension-text-style";
-import { Color } from "@tiptap/extension-color";
+import { TipTapEditorExtensions } from "./extensions";
+import { TipTapEditorProps } from "./props";
+import { useDebouncedCallback } from "use-debounce";
+import { useRouter } from "next/navigation";
+import { EditorBubbleMenu } from "./BubbleMenu/EditorBubbleMenu";
 
 export default function Editor() {
   let containerRef = useRef(null);
-  const debounce = require("lodash.debounce");
+  const router = useRouter();
   const { isContextLoading, documentId } = useNotepadStore();
+  const [isPending, startTransition] = useTransition();
+  const [hydrated, setHyrated] = useState(false);
   const updateContent = useMutation(api.aipen.patchContent);
-  const doc = useQuery(api.aipen.getDocument, {
-    documentId:
-      (documentId as Id<"aipen">) ?? "41fgg896th0vy3zymm4hqd9d9jhmkgg",
+
+  useEffect(() => {
+    if (!documentId) {
+      router.push("/ai-pen");
+    }
+  }, [documentId, router]);
+
+  const document = useQuery(api.aipen.getDocument, {
+    documentId: documentId as Id<"aipen">,
   });
 
-  // onUpdate: debounce(({ editor }: { editor: any }) => {
-  //   updateContent({
-  //     documentId: document?.[0]?._id as Id<"aipen">,
-  //     content: editor?.getHTML(),
-  //   });
-  // }, 2000),
+  const debouncedUpdates = useDebouncedCallback(async ({ editor }) => {
+    const html = editor.getHTML();
+    updateContent({
+      documentId: document?.[0]?._id as Id<"aipen">,
+      content: html,
+    });
+    startTransition(() => {
+      router.refresh();
+    });
+  }, 3000);
+
   const editor = useEditor({
-    extensions: [StarterKit, Text, TextStyle, Color, Link],
+    extensions: TipTapEditorExtensions,
+    editorProps: TipTapEditorProps,
+    onUpdate: (e) => {
+      debouncedUpdates(e);
+    },
     parseOptions: {
       preserveWhitespace: "full",
     },
+    content: "",
   });
 
   useEffect(() => {
-    if (!editor) return;
-    let { from, to } = editor.state.selection;
-    editor?.commands.setContent(doc?.[0]?.content ?? "", false, {
-      preserveWhitespace: "full",
-    });
-    editor.commands.setTextSelection({ from, to });
-    //eslint-disable-next-line
-  }, [doc]);
+    if (editor && document && !hydrated) {
+      let { from, to } = editor.state.selection;
+      editor?.commands.setContent(document?.[0]?.content ?? "", false, {
+        preserveWhitespace: "full",
+      });
+      editor.commands.setTextSelection({ from, to });
+      setHyrated(true);
+    }
+  }, [document, editor, hydrated]);
 
   if (isContextLoading) {
     return (
@@ -61,12 +79,7 @@ export default function Editor() {
         <AiInput />
       ) : (
         <>
-          {editor && (
-            <BubbleMenu
-              editor={editor}
-              containerRef={containerRef}
-            ></BubbleMenu>
-          )}
+          {editor && <EditorBubbleMenu editor={editor} />}
           <EditorContent editor={editor} />
         </>
       )}
