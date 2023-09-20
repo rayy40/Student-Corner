@@ -3,6 +3,7 @@ import { useClerk, useUser } from "@clerk/clerk-react";
 import { useConvexAuth } from "convex/react";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Header() {
@@ -54,7 +55,34 @@ export default function Header() {
 
   return (
     <div className="fixed z-10 top-0 flex justify-between items-center w-screen bg-white py-3 pl-6 pr-8 h-14 border-b border-light-gray shadow">
-      Header
+      <Link href={"/"}>
+        <Image
+          src="/images/icons8-student-50.png"
+          width={"35"}
+          height={"35"}
+          alt="Your Name"
+        />
+      </Link>
+      <div className="text-dark-gray font-medium flex gap-14 items-center">
+        <Link
+          className="hover:text-slate hover:underline underline-offset-4"
+          href={"/quizify"}
+        >
+          Quizify
+        </Link>
+        <Link
+          className="hover:text-slate hover:underline underline-offset-4"
+          href={"/ai-pen"}
+        >
+          Ai-Pen
+        </Link>
+        <Link
+          className="hover:text-slate hover:underline underline-offset-4"
+          href={"/chatbot"}
+        >
+          ChatBot
+        </Link>
+      </div>
       {isAuthenticated ? (
         <UserProfile />
       ) : (
