@@ -5,19 +5,22 @@ import Editor from "@/components/Editor/Editor";
 import { useUser } from "@clerk/clerk-react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/context/store";
+import { useEffect } from "react";
 
 export default function Document() {
   const user = useUser();
   const { userId } = useUserStore();
   const router = useRouter();
 
-  if (!user?.isSignedIn) {
-    router.push("/sign-in");
-  }
+  useEffect(() => {
+    if (!user?.isSignedIn) {
+      router.push("/sign-in");
+    }
 
-  if (!userId) {
-    router.push("/");
-  }
+    if (!userId) {
+      router.push("/");
+    }
+  }, [user, userId, router]);
 
   return (
     <div className="relative flex">

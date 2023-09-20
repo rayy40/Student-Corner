@@ -15,13 +15,15 @@ export default function AiPen() {
   const router = useRouter();
   const user = useUser();
 
-  if (!user?.isSignedIn) {
-    router.push("/sign-in");
-  }
+  useEffect(() => {
+    if (!user?.isSignedIn) {
+      router.push("/sign-in");
+    }
 
-  if (!userId) {
-    router.push("/");
-  }
+    if (!userId) {
+      router.push("/");
+    }
+  }, [user, userId, router]);
 
   const pageEntries = useQuery(api.aipen.getDocumentsByUserId, {
     userId: userId as Id<"users">,

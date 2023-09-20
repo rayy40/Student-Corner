@@ -2,15 +2,34 @@
 
 import { getTextContent } from "@/lib/scrape";
 import { useForm } from "react-hook-form";
-import { useAction, useMutation } from "convex/react";
+import { useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useUser } from "@clerk/clerk-react";
+import { useRouter } from "next/navigation";
+import Loading from "@/components/Loading/Loading";
+import { useChatStore, useUserStore } from "@/context/store";
+import { Id } from "@/convex/_generated/dataModel";
+import { useEffect, useState } from "react";
+
+type URLForm = {
+  url: string;
+};
 
 export default function Chatbot() {
-  type URLForm = {
-    url: string;
-  };
-  const createSource = useMutation(api.sources.add);
-  const createEmbeddings = useAction(api.chatbot.fetchEmbeddings);
+  const router = useRouter();
+  const { userId } = useUserStore();
+  const { setChatId } = useChatStore();
+  const generateAndAddEmbeddings = useAction(api.chatbot.fetchEmbeddings);
+  const [isLoading, setIsLoading] = useState(false);
+  const user = useUser();
+
+  useEffect(() => {
+    if (!user?.isSignedIn) {
+      router.push("/sign-in");
+    }
+  }, [user, userId, router]);
+
+  console.log(userId);
 
   const {
     register,
@@ -20,20 +39,32 @@ export default function Chatbot() {
   } = useForm<URLForm>();
 
   const onSubmit = async (data: URLForm) => {
-    const textInChunks = await getTextContent(data.url);
-    const embedding = await createEmbeddings({
-      name: textInChunks?.title!,
-      texts: textInChunks?.chunks.map(({ text }) => text) ?? [],
-    });
-    console.log(embedding);
-    console.log(textInChunks);
-    // const id = await addSource({
-    //   name: textInChunks?.title!,
-    //   chunks: textInChunks?.chunks!,
-    // });
-    // console.log(id);
-    return "";
+    try {
+      setIsLoading(true);
+      const textInChunks = await getTextContent(data.url);
+      if (textInChunks) {
+        const chatId = await generateAndAddEmbeddings({
+          userId: userId as Id<"users">,
+          title: textInChunks?.title,
+          texts: textInChunks?.chunks.map(({ text }) => text) ?? [],
+        });
+        setChatId(chatId);
+        router.push(`/chatbot/${chatId}`);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[550px] px-6 mx-auto min-h-screen flex flex-col gap-10 items-start">
