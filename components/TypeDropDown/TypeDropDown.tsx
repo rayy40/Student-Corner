@@ -3,12 +3,13 @@
 import { useRef, useState } from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import { FaCaretDown } from "react-icons/fa6";
+import { useQuizStore } from "@/context/store";
 
 const TypeDropDown = () => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
-  const [selectedType, setIsSelectedType] = useState("By Topic");
-  const types = ["By Topic", "By Paragraph", "By PDF"];
+  const { type: selectedType, setType: setSelectedType } = useQuizStore();
+  const types = ["By Topic", "By Paragraph"];
 
   useOutsideClick(ref, () => {
     setIsDropDownOpen(false);
@@ -35,7 +36,7 @@ const TypeDropDown = () => {
                   key={index}
                   className="w-[130px] whitespace-nowrap first:rounded-t-md last:rounded-b-md text-[0.925rem] p-2 border-dark-gray [&:not(:last-child)]:border-b hover:bg-hover-light-gray cursor-pointer"
                   onClick={() => {
-                    setIsSelectedType(type), setIsDropDownOpen(false);
+                    setSelectedType(type), setIsDropDownOpen(false);
                   }}
                 >
                   {type}

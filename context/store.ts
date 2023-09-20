@@ -2,6 +2,8 @@ import { create } from "zustand";
 import { Id } from "@/convex/_generated/dataModel";
 
 interface QuizState {
+  type: string;
+  setType: (type: string) => void;
   quizId: Id<"quiz"> | null;
   setQuizId: (quizId: Id<"quiz">) => void;
 }
@@ -40,6 +42,8 @@ export const useChatStore = create<ChatbotState>()((set) => ({
 }));
 
 export const useQuizStore = create<QuizState>()((set) => ({
+  type: "By Topic",
+  setType: (type) => set({ type }),
   quizId: null,
   setQuizId: (quizId) => set({ quizId }),
 }));

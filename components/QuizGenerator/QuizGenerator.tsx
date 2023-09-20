@@ -17,7 +17,7 @@ export default function QuizGenerator() {
   const { userId } = useUserStore();
   const router = useRouter();
   const createQuiz = useMutation(api.quiz.createQuiz);
-  const { setQuizId } = useQuizStore();
+  const { setQuizId, type } = useQuizStore();
 
   const {
     register,
@@ -84,40 +84,39 @@ export default function QuizGenerator() {
     );
   };
 
-  const File = () => {
-    return (
-      <div className="p-2 w-full h-[150px] bg-input-background rounded-md shadow-[inset_0_0_6px_-2px_rgba(15,15,15,0.25)]">
-        <div className="relative rounded-md border-2 bg-light-gray border-dotted border-dark-gray w-full h-full flex items-center justify-center shadow-[inset_0_0_6px_-2px_rgba(15,15,15,0.25)]">
-          <label
-            className="flex items-center justify-center w-full h-full rounded-md"
-            htmlFor="file"
-          >
-            <div className="flex items-center gap-2 text-xs p-2 px-3 rounded-md bg-dark-gray">
-              <LuFileUp /> Upload PDFs
-            </div>
-          </label>
-          <input
-            type="file"
-            id="file"
-            className="w-0 h-0 -z-10 absolute opacity-0"
-            {...register("file")}
-          />
-          {/* {errors.file && (
-            <p className="text-xs text-sign-in">{errors?.file?.message}</p>
-          )} */}
-        </div>
-      </div>
-    );
-  };
+  // const File = () => {
+  //   return (
+  //     <div className="p-2 w-full h-[150px] bg-input-background rounded-md shadow-[inset_0_0_6px_-2px_rgba(15,15,15,0.25)]">
+  //       <div className="relative rounded-md border-2 bg-light-gray border-dotted border-dark-gray w-full h-full flex items-center justify-center shadow-[inset_0_0_6px_-2px_rgba(15,15,15,0.25)]">
+  //         <label
+  //           className="flex items-center justify-center w-full h-full rounded-md"
+  //           htmlFor="file"
+  //         >
+  //           <div className="flex items-center gap-2 text-xs p-2 px-3 rounded-md bg-dark-gray">
+  //             <LuFileUp /> Upload PDFs
+  //           </div>
+  //         </label>
+  //         <input
+  //           type="file"
+  //           id="file"
+  //           className="w-0 h-0 -z-10 absolute opacity-0"
+  //           {...register("file")}
+  //         />
+  //         {/* {errors.file && (
+  //           <p className="text-xs text-sign-in">{errors?.file?.message}</p>
+  //         )} */}
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="mt-10 w-full flex flex-col gap-4"
     >
-      {/* <Topic />
-      <Paragraph /> */}
-      <File />
+      {type === "By Topic" && <Topic />}
+      {type === "By Paragraph" && <Paragraph />}
       <div className="flex flex-col gap-1">
         <label className="text-sm text-slate" htmlFor="Topic">
           Questions
