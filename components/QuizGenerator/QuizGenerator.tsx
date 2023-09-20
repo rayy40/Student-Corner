@@ -7,14 +7,14 @@ import { quizSchema } from "@/schema/QuizSchema";
 import { LuCopyCheck, LuBookOpen, LuPuzzle, LuFileUp } from "react-icons/lu";
 import { api } from "@/convex/_generated/api";
 import { useRouter } from "next/navigation";
-import useStoreUserEffect from "@/hooks/useStoreUserEffect";
+import { useUserStore } from "@/context/store";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuizStore } from "@/context/store";
 
 type FormData = z.infer<typeof quizSchema>;
 
 export default function QuizGenerator() {
-  const userId = useStoreUserEffect();
+  const { userId } = useUserStore();
   const router = useRouter();
   const createQuiz = useMutation(api.quiz.createQuiz);
   const { setQuizId } = useQuizStore();
