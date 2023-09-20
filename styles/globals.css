@@ -43,22 +43,6 @@ textarea:focus {
   }
 }
 
-.tiptap:focus-visible {
-  outline: none;
-}
-
-.tiptap {
-  max-width: 100%;
-  width: 100%;
-  font-size: 1rem;
-  letter-spacing: -0.032em;
-  white-space: pre;
-  word-break: break-word;
-  caret-color: rgb(55, 53, 47);
-  color: rgb(55, 53, 47);
-  font-weight: 500;
-}
-
 h1::selection,
 h2::selection,
 h3::selection,
@@ -75,24 +59,31 @@ strong::selection {
   background: #c2dcf7;
 }
 
+.ProseMirror .is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: rgba(55, 53, 47, 0.15);
+  pointer-events: none;
+  height: 0;
+}
+.ProseMirror .is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: rgba(55, 53, 47, 0.25);
+  pointer-events: none;
+  height: 0;
+}
+
 .tiptap h1 {
   font-weight: 600;
   font-size: 2.5rem;
-  line-height: 1.3;
-  margin: 1em 0 0.5em;
 }
 
 .tiptap strong {
   font-weight: 600;
 }
 
-.tiptap h1:empty::before {
-  content: "Title";
-  color: rgba(55, 53, 47, 0.15);
-}
-
 .tiptap h2 {
-  margin: 1.5em 0 0.5em;
   font-size: 1.825rem;
   line-height: 1.3;
 }
@@ -103,34 +94,7 @@ strong::selection {
   line-height: 1.3;
 }
 
-.tipta h4 {
-  margin: 1.5em 0 0.5em;
+.tiptap h4 {
   font-size: 1.25rem;
   line-height: 1.3;
-}
-
-.tiptap p {
-  font-weight: 400;
-  white-space: unset;
-  line-height: 1.75;
-}
-
-.tiptap ul {
-  width: 100%;
-  padding-left: 1em;
-  display: flex;
-  gap: 1em;
-  flex-direction: column;
-  align-items: flex-start;
-  list-style-type: disc;
-  letter-spacing: -0.032em;
-  word-break: break-word;
-  caret-color: rgb(55, 53, 47);
-  color: rgb(55, 53, 47);
-  font-weight: 400;
-  line-height: 1.5;
-}
-
-.tiptap li {
-  width: 100%;
 }
