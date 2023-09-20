@@ -10,7 +10,7 @@ export default function Header() {
   const router = useRouter();
   const { user } = useUser();
   const { signOut } = useClerk();
-  const { isLoading, isAuthenticated } = useConvexAuth();
+  const { isAuthenticated } = useConvexAuth();
 
   const UserProfile = () => {
     const initials =
@@ -63,26 +63,28 @@ export default function Header() {
           alt="Your Name"
         />
       </Link>
-      <div className="text-dark-gray font-medium flex gap-14 items-center">
-        <Link
-          className="hover:text-slate hover:underline underline-offset-4"
-          href={"/quizify"}
-        >
-          Quizify
-        </Link>
-        <Link
-          className="hover:text-slate hover:underline underline-offset-4"
-          href={"/ai-pen"}
-        >
-          Ai-Pen
-        </Link>
-        <Link
-          className="hover:text-slate hover:underline underline-offset-4"
-          href={"/chatbot"}
-        >
-          ChatBot
-        </Link>
-      </div>
+      {isAuthenticated && (
+        <div className="text-dark-gray font-medium flex gap-14 items-center">
+          <Link
+            className="hover:text-slate hover:underline underline-offset-4"
+            href={"/quizify"}
+          >
+            Quizify
+          </Link>
+          <Link
+            className="hover:text-slate hover:underline underline-offset-4"
+            href={"/ai-pen"}
+          >
+            Ai-Pen
+          </Link>
+          <Link
+            className="hover:text-slate hover:underline underline-offset-4"
+            href={"/chatbot"}
+          >
+            ChatBot
+          </Link>
+        </div>
+      )}
       {isAuthenticated ? (
         <UserProfile />
       ) : (
