@@ -13,10 +13,7 @@ export default defineSchema({
   }),
   aipen: defineTable({
     userId: v.id("users"),
-    input: v.optional(v.string()),
-    title: v.optional(v.string()),
     content: v.optional(v.string()),
-    lastOpenedOn: v.optional(v.string()),
   }),
   sources: defineTable({
     name: v.string(),
