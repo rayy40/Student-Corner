@@ -1,20 +1,31 @@
 "use client";
 
 import { api } from "@/convex/_generated/api";
-import useStoreUserEffect from "@/hooks/useStoreUserEffect";
 import { useQuery } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
 import Link from "next/link";
 import React from "react";
-import { useQuizStore } from "@/context/store";
+import { useQuizStore, useUserStore } from "@/context/store";
 import Loading from "@/components/Loading/Loading";
+import { useUser } from "@clerk/clerk-react";
+import { useRouter } from "next/navigation";
 
 export default function QuizDashboard() {
-  const userId = useStoreUserEffect();
+  const user = useUser();
+  const { userId } = useUserStore();
   const { setQuizId } = useQuizStore();
+  const router = useRouter();
+
+  if (!user?.isSignedIn) {
+    router.push("/sign-in");
+  }
+
+  if (!userId) {
+    router.push("/");
+  }
 
   const quizHistory = useQuery(api.quiz.getQuizHistory, {
-    userId: userId ?? ("31ab50dxjncgp7w6nkkvte2t9jdc4r0" as Id<"users">),
+    userId: userId as Id<"users">,
   });
 
   const getDate = (timestamp: number) => {

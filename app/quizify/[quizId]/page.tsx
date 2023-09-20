@@ -24,6 +24,12 @@ export default function Quiz(props: { params: { quizId: Id<"quiz"> } }) {
   const [quiz, setQuiz] = useState<Quiz[]>([]);
   const [questionVisible, setQuestionVisible] = useState(0);
 
+  useEffect(() => {
+    if (!props.params.quizId) {
+      router.push("/quizify");
+    }
+  }, [props.params.quizId, router]);
+
   const quizEntries = useQuery(api.quiz.getCurrentQuiz, {
     quizId: props.params.quizId,
   });

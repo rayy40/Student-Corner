@@ -1,7 +1,24 @@
+"use client";
+
 import Sidebar from "@/components/Sidebar/Sidebar";
 import Editor from "@/components/Editor/Editor";
+import { useUser } from "@clerk/clerk-react";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/context/store";
 
 export default function Document() {
+  const user = useUser();
+  const { userId } = useUserStore();
+  const router = useRouter();
+
+  if (!user?.isSignedIn) {
+    router.push("/sign-in");
+  }
+
+  if (!userId) {
+    router.push("/");
+  }
+
   return (
     <div className="relative flex">
       <div className="h-screen bg-input-background sticky top-0 bottom-0 shadow-[0_0_6px_1px_rgba(0,0,0,0.1)]">

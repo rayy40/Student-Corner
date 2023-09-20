@@ -1,7 +1,23 @@
+"use client";
+
 import QuizGenerator from "@/components/QuizGenerator/QuizGenerator";
 import TypeDropDown from "@/components/TypeDropDown/TypeDropDown";
+import { useUserStore } from "@/context/store";
+import { useUser } from "@clerk/clerk-react";
+import { useRouter } from "next/navigation";
 
 export default function Quizify() {
+  const user = useUser();
+  const { userId } = useUserStore();
+  const router = useRouter();
+
+  if (!user?.isSignedIn) {
+    router.push("/sign-in");
+  }
+
+  if (!userId) {
+    router.push("/");
+  }
   return (
     <div className="max-w-[500px] mx-auto min-h-screen flex flex-col items-start justify-center">
       <h2 className="mt-20 text-xl">Quizify</h2>

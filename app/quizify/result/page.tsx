@@ -5,6 +5,8 @@ import { api } from "@/convex/_generated/api";
 import { useQuizStore } from "@/context/store";
 import Loading from "@/components/Loading/Loading";
 import { Id } from "@/convex/_generated/dataModel";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 interface Quiz {
   answer: string;
@@ -15,8 +17,16 @@ interface Quiz {
 
 export default function Result() {
   const { quizId } = useQuizStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!quizId) {
+      router.push("/quizify");
+    }
+  }, [quizId, router]);
+
   const updatedQuizEntry = useQuery(api.quiz.getCurrentQuiz, {
-    quizId: "359gz1zrjqqm6k1b73y7e6d29jf8hpg" as Id<"quiz">,
+    quizId: quizId ?? ("36hrf57rp90rx37y0y7v12a39jfxe70" as Id<"quiz">),
   });
 
   if (!updatedQuizEntry) {
@@ -57,11 +67,11 @@ export default function Result() {
                 <td className="text-dark-gray border-b-light-gray border-b p-3 px-2 w-[5%]">
                   {id + 1}
                 </td>
-                <td className="border-b-light-gray border-b p-3 px-2 mx-4 w-[50%]">
+                <td className="border-b-light-gray border-b p-3 px-2 pr-12 w-[50%]">
                   <p className="font-light">{q.question}</p>
                   <p className="font-medium">{q.answer}</p>
                 </td>
-                <td className="border-b-light-gray border-b p-3 px-2 mx-4 w-[40%] font-medium">
+                <td className="border-b-light-gray border-b p-3 px-2 w-[40%] font-medium">
                   {q.yourAnswer}
                 </td>
               </tr>

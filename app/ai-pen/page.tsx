@@ -4,17 +4,27 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useRouter } from "next/navigation";
 import AiInput from "@/components/AiInput/AiInput";
-import useStoreUserEffect from "@/hooks/useStoreUserEffect";
 import { Id } from "@/convex/_generated/dataModel";
 import { useEffect } from "react";
-import { useNotepadStore } from "@/context/store";
+import { useNotepadStore, useUserStore } from "@/context/store";
+import { useUser } from "@clerk/clerk-react";
 
 export default function AiPen() {
   const { setDocumentId } = useNotepadStore();
-  const userId = useStoreUserEffect();
+  const { userId } = useUserStore();
   const router = useRouter();
+  const user = useUser();
+
+  if (!user?.isSignedIn) {
+    router.push("/sign-in");
+  }
+
+  if (!userId) {
+    router.push("/");
+  }
+
   const pageEntries = useQuery(api.aipen.getDocumentsByUserId, {
-    userId: userId ?? ("31ab50dxjncgp7w6nkkvte2t9jdc4r0" as Id<"users">),
+    userId: userId as Id<"users">,
   });
 
   useEffect(() => {
