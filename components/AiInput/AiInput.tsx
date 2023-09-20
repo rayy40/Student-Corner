@@ -1,15 +1,15 @@
 "use client";
 
-import { useNotepadStore } from "@/context/store";
+import { useNotepadStore, useUserStore } from "@/context/store";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import useOutsideClick from "@/hooks/useOutsideClick";
-import useStoreUserEffect from "@/hooks/useStoreUserEffect";
 import { useAction, useMutation } from "convex/react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaArrowUp } from "react-icons/fa6";
+import Loading from "../Loading/Loading";
 
 type AIForm = {
   text: string;
@@ -18,35 +18,14 @@ type AIForm = {
 export default function AiInput() {
   const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
-  const userId = useStoreUserEffect();
+  const { userId } = useUserStore();
   const createDocument = useMutation(api.aipen.createDocument);
   const generateContent = useAction(api.aipen.generateContent);
   const { documentId, setDocumentId } = useNotepadStore();
+  const [isLoading, setIsLoading] = useState(false);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const { register, handleSubmit, reset, setValue, setFocus } =
     useForm<AIForm>();
-
-  useOutsideClick(ref, () => {
-    setIsDropDownOpen(false);
-  });
-
-  const onSubmit = async (data: AIForm) => {
-    let docId;
-    if (!documentId) {
-      docId = await createDocument({
-        userId: userId as Id<"users">,
-      });
-    } else {
-      docId = documentId;
-    }
-    await generateContent({
-      documentId: docId,
-      input: data.text,
-    });
-    setDocumentId(docId);
-    reset();
-    router.push(`/ai-pen/${docId}`);
-  };
 
   const prompts = [
     "Write an essay about...",
@@ -58,6 +37,42 @@ export default function AiInput() {
     "Write a todo list about...",
     "Brainstorm ideas on ",
   ];
+  useOutsideClick(ref, () => {
+    setIsDropDownOpen(false);
+  });
+
+  const onSubmit = async (data: AIForm) => {
+    try {
+      setIsLoading(true);
+      let docId;
+      if (!documentId) {
+        docId = await createDocument({
+          userId: userId as Id<"users">,
+        });
+      } else {
+        docId = documentId;
+      }
+      await generateContent({
+        documentId: docId,
+        input: data.text,
+      });
+      setDocumentId(docId);
+      reset();
+      router.push(`/ai-pen/${docId}`);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
 
   const List = ({ prompt }: { prompt: string }) => {
     return (
@@ -73,8 +88,9 @@ export default function AiInput() {
       </li>
     );
   };
+
   return (
-    <div className="relative mx-auto pt-10 w-full">
+    <div className="relative mx-auto pt-10 max-2-[600px]">
       <form onSubmit={handleSubmit(onSubmit)} className="relative w-full">
         <label htmlFor="AiInput"></label>
         <input
