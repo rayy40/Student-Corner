@@ -195,7 +195,7 @@ export const creativeStoryPrompt = (topic: string) => {
 export const prosAndCons = (topic: string) => {
   return `${topic}.
   Include up to 5 points for each category, with a brief description for each point. 
-  Format the response using Markdown, with '## Pros' and '## Cons' headings to separate the lists`;
+  Format the response using Markdown, with '# Title', '## Pros' and '## Cons' headings to separate the lists`;
 };
 
 export const todoList = (topic: string) => {
@@ -209,7 +209,7 @@ export const todoList = (topic: string) => {
 export const brainstormIdeas = (topic: string) => {
   return `${topic}
   Include up to 10 points with a brief description for each point.
-  Format the response using Markdown.
+  Format the response using Markdown, with #Title.
   `;
 };
 
