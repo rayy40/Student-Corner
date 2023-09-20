@@ -49,9 +49,9 @@ export default function Home() {
           description=" Instantly create and edit articles, essays, and blogs with powerful AI assistance."
         />
         <Sections
-          link="/learn-mastery"
-          title="Learn Mastery"
-          description="Create, download, and plan your courses with comprehensive materials and a structured learning roadmap."
+          link="/chatbot"
+          title="Chatbot"
+          description="Too big an article? Paste the link and questiosn from the articles directly."
         />
       </div>
     </main>
