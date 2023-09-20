@@ -6,6 +6,11 @@ interface QuizState {
   setQuizId: (quizId: Id<"quiz">) => void;
 }
 
+interface UserState {
+  userId: Id<"users"> | null;
+  setUserId: (userId: Id<"users">) => void;
+}
+
 interface NotepadState {
   context: string;
   setContext: (context: string) => void;
@@ -14,6 +19,11 @@ interface NotepadState {
   isContextLoading: boolean;
   setIsContextLoading: (isContextLoading: boolean) => void;
 }
+
+export const useUserStore = create<UserState>()((set) => ({
+  userId: null,
+  setUserId: (userId) => set({ userId }),
+}));
 
 export const useQuizStore = create<QuizState>()((set) => ({
   quizId: null,
