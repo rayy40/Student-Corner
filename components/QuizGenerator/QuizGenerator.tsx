@@ -1,7 +1,7 @@
 "use client";
 import { z } from "zod";
 import { useMutation } from "convex/react";
-import { useForm } from "react-hook-form";
+import { FieldError, UseFormRegister, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { quizSchema } from "@/schema/QuizSchema";
 import { LuCopyCheck, LuBookOpen, LuPuzzle, LuFileUp } from "react-icons/lu";
@@ -10,13 +10,25 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/context/store";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuizStore } from "@/context/store";
+import { useState } from "react";
+import Loading from "../Loading/Loading";
 
 type FormData = z.infer<typeof quizSchema>;
+
+type Register = UseFormRegister<{
+  type: "mcq" | "true_false" | "short_answer";
+  inputType: "By Topic" | "By Paragraph";
+  questions: number;
+  topic?: string | undefined;
+  paragraph?: string | undefined;
+  file?: unknown;
+}>;
 
 export default function QuizGenerator() {
   const { userId } = useUserStore();
   const router = useRouter();
   const createQuiz = useMutation(api.quiz.createQuiz);
+  const [isLoading, setIsloading] = useState(false);
   const { setQuizId, type } = useQuizStore();
 
   const {
@@ -29,24 +41,46 @@ export default function QuizGenerator() {
   } = useForm<FormData>({
     resolver: zodResolver(quizSchema),
     defaultValues: {
-      questions: 3,
+      questions: 5,
       type: "mcq",
     },
   });
 
   const onSubmit = async (data: FormData) => {
     //Call the api
-    const quizId = await createQuiz({
-      userId: userId as Id<"users">,
-      data: data,
-      response: [],
-    });
-    setQuizId(quizId);
-    reset();
-    router.push(`/quizify/${quizId}`);
+    try {
+      setIsloading(true);
+      console.log("first");
+      // const quizId = await createQuiz({
+      //   userId: userId as Id<"users">,
+      //   data: data,
+      //   response: [],
+      // });
+      // setQuizId(quizId);
+      reset();
+      // router.push(`/quizify/${quizId}`);
+    } catch (errors) {
+      console.log(errors);
+    } finally {
+      setIsloading(false);
+    }
   };
 
-  const Topic = () => {
+  if (isLoading) {
+    return (
+      <div className="h-[80vh] w-full flex items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
+
+  const Topic = ({
+    register,
+    errors,
+  }: {
+    register: Register;
+    errors: FieldError | undefined;
+  }) => {
     return (
       <div className="flex flex-col gap-1">
         <label className="text-sm text-slate" htmlFor="Topic">
@@ -58,14 +92,18 @@ export default function QuizGenerator() {
           placeholder="Enter a topic"
           {...register("topic")}
         />
-        {errors.topic && (
-          <p className="text-xs text-sign-in">{errors?.topic?.message}</p>
-        )}
+        {errors && <p className="text-xs text-sign-in">{errors?.message}</p>}
       </div>
     );
   };
 
-  const Paragraph = () => {
+  const Paragraph = ({
+    register,
+    errors,
+  }: {
+    register: Register;
+    errors: FieldError | undefined;
+  }) => {
     return (
       <div className="flex flex-col gap-1">
         <label className="text-sm text-slate" htmlFor="paragraph">
@@ -77,9 +115,7 @@ export default function QuizGenerator() {
           placeholder="Enter your text..."
           {...register("paragraph")}
         />
-        {errors.paragraph && (
-          <p className="text-xs text-sign-in">{errors?.paragraph?.message}</p>
-        )}
+        {errors && <p className="text-xs text-sign-in">{errors?.message}</p>}
       </div>
     );
   };
@@ -113,10 +149,14 @@ export default function QuizGenerator() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-10 w-full flex flex-col gap-4"
+      className="w-full flex flex-col gap-4"
     >
-      {type === "By Topic" && <Topic />}
-      {type === "By Paragraph" && <Paragraph />}
+      {type === "By Topic" && (
+        <Topic register={register} errors={errors?.topic} />
+      )}
+      {type === "By Paragraph" && (
+        <Paragraph register={register} errors={errors?.paragraph} />
+      )}
       <div className="flex flex-col gap-1">
         <label className="text-sm text-slate" htmlFor="Topic">
           Questions
@@ -126,7 +166,12 @@ export default function QuizGenerator() {
           type="number"
           placeholder="Enter no of questions"
           {...register("questions", { valueAsNumber: true })}
-          onChange={(e) => setValue("questions", parseInt(e.target.value))}
+          onChange={(e) => {
+            const parsedValue = parseInt(e.target.value, 10);
+            if (!isNaN(parsedValue)) {
+              setValue("questions", parsedValue);
+            }
+          }}
         />
         {errors.questions && (
           <p className="text-xs text-sign-in">{errors?.questions?.message}</p>
