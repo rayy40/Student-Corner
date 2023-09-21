@@ -12,12 +12,14 @@ import { TipTapEditorProps } from "./props";
 import { useDebouncedCallback } from "use-debounce";
 import { useRouter } from "next/navigation";
 import { EditorBubbleMenu } from "./BubbleMenu/EditorBubbleMenu";
+import Loading from "../Loading/Loading";
 
 export default function Editor() {
   let containerRef = useRef(null);
   const router = useRouter();
-  const { isContextLoading, documentId } = useNotepadStore();
+  const { documentId } = useNotepadStore();
   const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(true);
   const [hydrated, setHyrated] = useState(false);
   const updateContent = useMutation(api.aipen.patchContent);
 
@@ -63,19 +65,22 @@ export default function Editor() {
       editor.commands.setTextSelection({ from, to });
       setHyrated(true);
     }
+    if (document) {
+      setIsLoading(false);
+    }
   }, [document, editor, hydrated]);
 
-  if (isContextLoading) {
+  if (isLoading) {
     return (
-      <div className="w-full flex items-center justify-center">
-        <h1>Loading...</h1>
+      <div className="w-full h-[calc(100vh-11rem)] flex items-center justify-center">
+        <Loading />
       </div>
     );
   }
 
   return (
     <div ref={containerRef} className="w-full text-left">
-      {editor?.isEmpty && !document?.[0]?.content ? (
+      {editor?.isEmpty ? (
         <AiInput />
       ) : (
         <>
