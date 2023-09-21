@@ -4,8 +4,24 @@ import { useRef, useState } from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import { FaCaretDown } from "react-icons/fa6";
 import { useQuizStore } from "@/context/store";
+import { UseFormSetValue } from "react-hook-form";
 
-const TypeDropDown = () => {
+type setValue = UseFormSetValue<
+  | {
+      inputType: "By Topic";
+      type: "mcq" | "true_false" | "short_answer";
+      questions: number;
+      topic?: string | undefined;
+    }
+  | {
+      inputType: "By Paragraph";
+      type: "mcq" | "true_false" | "short_answer";
+      questions: number;
+      paragraph?: string | undefined;
+    }
+>;
+
+const TypeDropDown = ({ setValue }: { setValue: setValue }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const { type: selectedType, setType: setSelectedType } = useQuizStore();
@@ -36,6 +52,10 @@ const TypeDropDown = () => {
                   key={index}
                   className="w-[130px] whitespace-nowrap first:rounded-t-md last:rounded-b-md text-[0.925rem] p-2 border-dark-gray [&:not(:last-child)]:border-b hover:bg-hover-light-gray cursor-pointer"
                   onClick={() => {
+                    setValue(
+                      "inputType",
+                      type === "By Topic" ? "By Topic" : "By Paragraph"
+                    );
                     setSelectedType(type), setIsDropDownOpen(false);
                   }}
                 >

@@ -12,6 +12,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { useQuizStore } from "@/context/store";
 import { useState } from "react";
 import Loading from "../Loading/Loading";
+import TypeDropDown from "../TypeDropDown/TypeDropDown";
 
 type FormData = z.infer<typeof quizSchema>;
 
@@ -48,17 +49,30 @@ export default function QuizGenerator() {
 
   const onSubmit = async (data: FormData) => {
     //Call the api
+    const inputData = {
+      questions: data.questions,
+      type: data.type,
+      ...(data.inputType === "By Topic" ? { topic: data.topic } : {}),
+      ...(data.inputType === "By Paragraph"
+        ? { paragraph: data.paragraph }
+        : {}),
+    };
     try {
       setIsloading(true);
-      console.log("first");
-      // const quizId = await createQuiz({
-      //   userId: userId as Id<"users">,
-      //   data: data,
-      //   response: [],
-      // });
-      // setQuizId(quizId);
+      const quizId = await createQuiz({
+        userId: userId as Id<"users">,
+        data: {
+          topic: inputData.topic,
+          paragraph: inputData.paragraph,
+          questions: inputData.questions,
+          type: inputData.type,
+        },
+        response: [],
+      });
+      setQuizId(quizId);
+      await router.push(`/quizify/${quizId}`);
       reset();
-      // router.push(`/quizify/${quizId}`);
+      setIsloading(false);
     } catch (errors) {
       console.log(errors);
     } finally {
@@ -83,10 +97,11 @@ export default function QuizGenerator() {
   }) => {
     return (
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-slate" htmlFor="Topic">
+        <label className="text-sm text-slate" htmlFor="topic">
           Topic
         </label>
         <input
+          id="topic"
           className="text-sm p-2 h-[36px] font-normal bg-input-background shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md"
           type="text"
           placeholder="Enter a topic"
@@ -110,6 +125,7 @@ export default function QuizGenerator() {
           Paragraph
         </label>
         <textarea
+          id="paragraph"
           rows={6}
           className="text-sm p-2 font-normal bg-input-background shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md"
           placeholder="Enter your text..."
@@ -151,17 +167,19 @@ export default function QuizGenerator() {
       onSubmit={handleSubmit(onSubmit)}
       className="w-full flex flex-col gap-4"
     >
+      <TypeDropDown setValue={setValue} />
       {type === "By Topic" && (
-        <Topic register={register} errors={errors?.topic} />
+        <Topic register={register} errors={errors?.inputType} />
       )}
       {type === "By Paragraph" && (
-        <Paragraph register={register} errors={errors?.paragraph} />
+        <Paragraph register={register} errors={errors?.inputType} />
       )}
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-slate" htmlFor="Topic">
+        <label className="text-sm text-slate" htmlFor="questions">
           Questions
         </label>
         <input
+          id="questions"
           className="text-sm p-2 h-[36px] font-normal bg-input-background shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md"
           type="number"
           placeholder="Enter no of questions"
