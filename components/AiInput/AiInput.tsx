@@ -92,10 +92,11 @@ export default function AiInput() {
   return (
     <div className="relative mx-auto pt-10 max-2-[600px]">
       <form onSubmit={handleSubmit(onSubmit)} className="relative w-full">
-        <label htmlFor="AiInput"></label>
+        <label htmlFor="aiInput"></label>
         <input
           autoFocus
           autoComplete="off"
+          id="aiInput"
           type="text"
           className="w-full text-md px-4 py-6 h-10 font-normal bg-input-background shadow-[0_0_6px_1px_rgba(0,0,0,0.15)] rounded-md focus:outline-[rgba(0,0,0,0.1)]"
           placeholder="Ask AI to write anything..."

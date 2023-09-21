@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useSignUp } from "@clerk/clerk-react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 // import { FaGoogle } from "react-icons/fa6";
 import Loading from "@/components/Loading/Loading";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function SignUpPage() {
+  const router = useRouter();
   const { isLoaded, signUp, setActive } = useSignUp();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,7 +19,6 @@ export default function SignUpPage() {
   const [password, setPassword] = useState("");
   const [isPendingVerification, setIsPendingVerification] = useState(false);
   const [code, setCode] = useState("");
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -89,6 +90,7 @@ export default function SignUpPage() {
             <div className="flex flex-row gap-2">
               <input
                 className="w-1/2 text-sm p-2 h-[36px] font-normal bg-input-background shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md"
+                id="first name"
                 type="name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -96,6 +98,7 @@ export default function SignUpPage() {
               />
               <input
                 className="w-1/2 text-sm p-2 h-[36px] font-normal bg-input-background shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md"
+                id="last name"
                 type="name"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
@@ -105,6 +108,8 @@ export default function SignUpPage() {
             <div className="flex flex-col gap-1">
               <input
                 className="text-sm p-2 h-[36px] font-normal bg-input-background shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md"
+                autoComplete={"on"}
+                id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -114,6 +119,7 @@ export default function SignUpPage() {
             <div className="flex flex-col gap-1">
               <input
                 className="text-sm p-2 h-[36px] font-normal bg-input-background shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md"
+                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

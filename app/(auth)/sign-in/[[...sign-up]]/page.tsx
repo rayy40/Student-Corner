@@ -8,12 +8,12 @@ import Link from "next/link";
 import Loading from "@/components/Loading/Loading";
 
 export default function SignInPage() {
+  const router = useRouter();
   const { isLoaded, signIn, setActive } = useSignIn();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -61,6 +61,8 @@ export default function SignInPage() {
           <div className="flex flex-col gap-1">
             <input
               className="text-sm p-2 h-[36px] font-normal bg-input-background shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md"
+              autoComplete={"on"}
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -70,6 +72,7 @@ export default function SignInPage() {
           <div className="flex flex-col gap-1">
             <input
               className="text-sm p-2 h-[36px] font-normal bg-input-background shadow-[inset_0_0_0_1px_rgba(15,15,15,0.1)] rounded-md"
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

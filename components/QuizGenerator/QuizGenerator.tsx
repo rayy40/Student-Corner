@@ -70,6 +70,7 @@ export default function QuizGenerator() {
         response: [],
       });
       setQuizId(quizId);
+      reset();
       router.prefetch(`/quizify/${quizId}`);
       router.push(`/quizify/${quizId}`);
     } catch (errors) {
