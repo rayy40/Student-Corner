@@ -75,7 +75,7 @@ export default function Editor() {
 
   return (
     <div ref={containerRef} className="w-full text-left">
-      {editor?.isEmpty ? (
+      {editor?.isEmpty && !document?.[0]?.content ? (
         <AiInput />
       ) : (
         <>
