@@ -57,8 +57,8 @@ export default function QuizGenerator() {
         ? { paragraph: data.paragraph }
         : {}),
     };
+    setIsloading(true);
     try {
-      setIsloading(true);
       const quizId = await createQuiz({
         userId: userId as Id<"users">,
         data: {
@@ -70,9 +70,8 @@ export default function QuizGenerator() {
         response: [],
       });
       setQuizId(quizId);
-      await router.push(`/quizify/${quizId}`);
-      reset();
-      setIsloading(false);
+      router.prefetch(`/quizify/${quizId}`);
+      router.push(`/quizify/${quizId}`);
     } catch (errors) {
       console.log(errors);
     } finally {

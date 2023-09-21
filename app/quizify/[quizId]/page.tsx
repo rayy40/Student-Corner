@@ -22,6 +22,7 @@ export default function Quiz(props: { params: { quizId: Id<"quiz"> } }) {
   const submitOptions = useMutation(api.quiz.updateCurrentQuiz);
 
   const [quiz, setQuiz] = useState<Quiz[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [questionVisible, setQuestionVisible] = useState(0);
 
   useEffect(() => {
@@ -44,19 +45,27 @@ export default function Quiz(props: { params: { quizId: Id<"quiz"> } }) {
   };
 
   const handleSubmit = async () => {
-    const transformedQuiz = quiz.map((question) => ({
-      ...question,
-      yourAnswer: question.yourAnswer || "",
-    }));
+    setIsLoading(true);
+    try {
+      const transformedQuiz = quiz.map((question) => ({
+        ...question,
+        yourAnswer: question.yourAnswer || "",
+      }));
 
-    const score = calculateScore(transformedQuiz);
+      const score = calculateScore(transformedQuiz);
 
-    submitOptions({
-      score: score,
-      response: transformedQuiz,
-      quizId: props.params.quizId,
-    });
-    router.push("/quizify/result");
+      await submitOptions({
+        score: score,
+        response: transformedQuiz,
+        quizId: props.params.quizId,
+      });
+      router.prefetch("/quizify/result");
+      router.push("/quizify/result");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -65,7 +74,7 @@ export default function Quiz(props: { params: { quizId: Id<"quiz"> } }) {
     }
   }, [quizEntries]);
 
-  if (!quizEntries?.[0]?.response || quiz.length === 0) {
+  if (!quizEntries?.[0]?.response || quiz.length === 0 || isLoading) {
     return (
       <div className="h-screen w-full flex items-center justify-center">
         <Loading />
