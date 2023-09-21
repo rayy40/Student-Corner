@@ -57,13 +57,12 @@ export default function Editor() {
   });
 
   useEffect(() => {
-    if (editor && document && !hydrated) {
+    if (editor && document) {
       let { from, to } = editor.state.selection;
       editor?.commands.setContent(document?.[0]?.content ?? "", false, {
         preserveWhitespace: "full",
       });
       editor.commands.setTextSelection({ from, to });
-      setHyrated(true);
     }
     if (document) {
       setIsLoading(false);

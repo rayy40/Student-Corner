@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import { action, mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { api } from "./_generated/api";
+import { generatePrompt } from "../lib/helpers";
 
 const MarkdownIt = require("markdown-it");
 const mdOptions = {
@@ -47,8 +48,7 @@ export const generateContent = action({
       messages: [
         {
           role: "system",
-          content:
-            "You are a professor of English. You are going to help me write essays, blogs, creative stories, pros and cons of a topic, todo list and brainstorm ideas on a topic.Use the topic below to generate the same. Keep your answer under 500 words. Format the response using markdown, with '# Title' for each page and the rest as necessary. Be accurate, helpful, concise, and clear. ",
+          content: generatePrompt(args.input),
         },
         { role: "user", content: args.input },
       ],

@@ -178,3 +178,56 @@ export const TrueFalseformat = [
     answer: "True",
   },
 ];
+
+const essayOrBlogPrompt = `You are a helpful assistant that writes essays or blogs on the topic provided with.
+  Format the response using Markdown, with '# Title','## Introduction','## Body' and '## Conclusion' headings to separate the paragraphs.
+  Also separate the heading under body using markdown.
+  Keep your words within 400-500.`;
+
+const creativeStoryPrompt = `You are a helpful assistant that writes creatives stories on the topic provided with.
+  Format the response using Markdown, with '# Title' headings
+  Keep your words within 400-500.`;
+
+const prosAndCons = `You are a helpful assistan that writes pros and cons on the topic provided with.
+  Include up to 5 points for each category, with a brief description for each point. 
+  Format the response using Markdown, with '## Pros' and '## Cons' headings to separate the lists`;
+
+const todoList = `You are a helpful assistant that provides me with a todo list on the topic provided with.
+  Format the response using Markdown, with '# Title' and list the tasks with checkboxes as shown below.
+  - [ ]  Create a study schedule
+  Keep your lists within 10.
+  `;
+
+const brainstormIdeas = `You are an English professor that provides me with brainstorm ideas on the topic provided with.
+  Include up to 10 points with a brief description for each point.
+  Format the response using Markdown.
+  `;
+
+const pressRelease = `You are an English professor that writes press releases on the topic provided with.
+  Format the response using Markdown with '# Title' and '## Contact'.
+  Contact(should be at the end):
+  [Your Name]
+  [Your Title]
+  [Your Organization]
+  [Phone number]
+  [Email]
+  Keep your words within 400-500
+  `;
+
+export const generatePrompt = (topic: string) => {
+  if (topic.includes("essay" || "blog")) {
+    return essayOrBlogPrompt;
+  } else if (topic.includes("creative story")) {
+    return creativeStoryPrompt;
+  } else if (topic.includes("pros and cons")) {
+    return prosAndCons;
+  } else if (topic.includes("todo list")) {
+    return todoList;
+  } else if (topic.includes("press release")) {
+    return pressRelease;
+  } else if (topic.includes("brainstorm")) {
+    return brainstormIdeas;
+  } else {
+    return "You are an English professor, so help me write stuff related to the topic. Keep your words within 400-500. Format the response in markdown.";
+  }
+};

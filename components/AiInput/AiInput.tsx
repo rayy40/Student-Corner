@@ -68,7 +68,7 @@ export default function AiInput() {
 
   if (isLoading) {
     return (
-      <div className="w-full h-screen flex items-center justify-center">
+      <div className="w-full h-[calc(100vh-11rem)] flex items-center justify-center">
         <Loading />
       </div>
     );
