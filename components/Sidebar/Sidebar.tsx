@@ -19,9 +19,10 @@ export default function Sidebar() {
   const { setDocumentId } = useNotepadStore();
   const createDocument = useMutation(api.aipen.createDocument);
 
-  const pageEntries = useQuery(api.aipen.getDocumentsByUserId, {
-    userId: userId as Id<"users">,
-  });
+  const pageEntries = useQuery(
+    api.aipen.getDocumentsByUserId,
+    userId ? { userId: userId as Id<"users"> } : "skip"
+  );
 
   const createNewPage = async () => {
     const documentId = await createDocument({

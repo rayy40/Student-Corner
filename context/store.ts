@@ -25,8 +25,6 @@ interface NotepadState {
   setContext: (context: string) => void;
   documentId: Id<"aipen"> | null;
   setDocumentId: (documentId: Id<"aipen">) => void;
-  isContextLoading: boolean;
-  setIsContextLoading: (isContextLoading: boolean) => void;
 }
 
 export const useUserStore = create<UserState>()((set) => ({
@@ -53,6 +51,4 @@ export const useNotepadStore = create<NotepadState>()((set) => ({
   setContext: (context) => set({ context }),
   documentId: null,
   setDocumentId: (documentId) => set({ documentId }),
-  isContextLoading: false,
-  setIsContextLoading: (isContextLoading) => set({ isContextLoading }),
 }));
