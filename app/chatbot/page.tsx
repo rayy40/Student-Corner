@@ -47,6 +47,7 @@ export default function Chatbot() {
           texts: textInChunks?.chunks.map(({ text }) => text) ?? [],
         });
         setChatId(chatId);
+        reset();
         router.push(`/chatbot/${chatId}`);
       }
     } catch (err) {
@@ -69,8 +70,8 @@ export default function Chatbot() {
       <div className="w-full mt-24 flex gap flex-col justify-center items-center">
         <h2 className="text-xl font-medium">Chat with Link</h2>
         <p className="max-w-[400px] text-center font-light">
-          Provide links of documentation of a language/library/framework to
-          clear ask questions to help with your doubts.
+          Our advanced AI technology will analyze the article and provide you
+          with precise answers.
         </p>
       </div>
       <div className="w-full">
