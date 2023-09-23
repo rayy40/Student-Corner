@@ -18,7 +18,7 @@ type URLForm = {
 export default function Chatbot() {
   const router = useRouter();
   const { userId } = useUserStore();
-  const { setChatId } = useChatStore();
+  const { setChatId, setAnswer } = useChatStore();
   const generateAndAddEmbeddings = useAction(api.chatbot.fetchEmbeddings);
   const [isLoading, setIsLoading] = useState(false);
   const user = useUser();
@@ -39,6 +39,7 @@ export default function Chatbot() {
   const onSubmit = async (data: URLForm) => {
     try {
       setIsLoading(true);
+      setAnswer("");
       const textInChunks = await getTextContent(data.url);
       if (textInChunks) {
         const chatId = await generateAndAddEmbeddings({
